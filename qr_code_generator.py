@@ -16,7 +16,7 @@ def generate(window, entry, save_button):
     qr.make(fit=True)
     img = qr.make_image()
     img.save("./temp.png")
-
+ 
     # Show the QRcode to the user
     photo = PhotoImage(file="./temp.png")
     qr_label = Label(window, image=photo, compound="bottom")
