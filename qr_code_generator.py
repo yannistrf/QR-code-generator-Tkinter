@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import qrcode
 import os
+from shutil import move
 
 
 def generate(window, entry, save_button):
@@ -16,7 +17,7 @@ def generate(window, entry, save_button):
     qr.make(fit=True)
     img = qr.make_image()
     img.save("./temp.png")
- 
+
     # Show the QRcode to the user
     photo = PhotoImage(file="./temp.png")
     qr_label = Label(window, image=photo, compound="bottom")
@@ -32,7 +33,7 @@ def save(save_buton):
 
     # Check the case user presses cancel, aka img_path = None
     if img_path:
-        os.rename("./temp.png", img_path.name)
+        move("./temp.png", img_path.name)
         save_button.config(state=DISABLED)
  
 
