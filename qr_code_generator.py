@@ -33,6 +33,8 @@ def save(save_buton):
 
     # Check the case user presses cancel, aka img_path = None
     if img_path:
+        if os.name == "nt":
+            img_path += ".png"
         move("./temp.png", img_path.name)
         save_button.config(state=DISABLED)
  
@@ -57,8 +59,8 @@ entry.grid(row=0, column=1)
 frame = Frame(window, bg=BG_COLOR)
 frame.grid(row=1, column=0, columnspan=2)
 
-save_label = Label(frame, text="When saving the QR code, add '.png' at the end of the file name.", bg=BG_COLOR)
-save_label.grid(row=0, column=0, columnspan=2)
+# save_label = Label(frame, text="When saving the QR code, add '.png' at the end of the file name.", bg=BG_COLOR)
+# save_label.grid(row=0, column=0, columnspan=2)
 
 save_button = Button(frame, text="Save", command=lambda: save(save_button), state=DISABLED, cursor="hand2")
 save_button.grid(row=1, column=1)
