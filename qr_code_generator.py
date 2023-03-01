@@ -2,18 +2,15 @@ from tkinter import *
 from tkinter import filedialog
 import qrcode
 import os
-import shutil
 
 
 def generate(window, entry, save_button):
-    
+    # Get text from the entry box
     text = entry.get()
+    # Enable the save button
     save_button.config(state=ACTIVE)
 
-    # code = qrcode.make(text)
-    # code.save("qr_code.png")
-
-    # Generate and save the QRcode in current directory temporary
+    # Generate and save the QRcode in current directory for now
     qr = qrcode.QRCode(version=2, box_size=10, border=2)
     qr.add_data(text)
     qr.make(fit=True)
@@ -29,13 +26,14 @@ def generate(window, entry, save_button):
     qr_label.image = photo  # needed to add this line, else the image doesn't show
 
 
-def save():
+def save(save_buton):
     # Returns file object, we only want the path
     img_path = filedialog.asksaveasfile(filetypes=[("PNG Image", "*.png")])
 
     # Check the case user presses cancel, aka img_path = None
     if img_path:
-        shutil.move("./temp.png", img_path.name)
+        os.rename("./temp.png", img_path.name)
+        save_button.config(state=DISABLED)
  
 
 # Main window dimensions
@@ -61,7 +59,7 @@ frame.grid(row=1, column=0, columnspan=2)
 save_label = Label(frame, text="When saving the QR code, add '.png' at the end of the file name.", bg=BG_COLOR)
 save_label.grid(row=0, column=0, columnspan=2)
 
-save_button = Button(frame, text="Save", command=save, state=DISABLED, cursor="hand2")
+save_button = Button(frame, text="Save", command=lambda: save(save_button), state=DISABLED, cursor="hand2")
 save_button.grid(row=1, column=1)
 
 generate_button = Button(frame, text="Generate", command=lambda: generate(window, entry, save_button), cursor="hand2")
