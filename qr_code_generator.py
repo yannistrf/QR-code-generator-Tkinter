@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import qrcode
 import os
-from shutil import move
+from shutil import move     # to change a file's location
 
 
 def generate(window, entry, save_button):
@@ -29,18 +29,22 @@ def generate(window, entry, save_button):
 
 def save(save_buton):
     # Returns file object, we only want the path
-    img_path = filedialog.asksaveasfile(filetypes=[("PNG Image", "*.png")])
+    img_path = filedialog.asksaveasfile(
+                        filetypes=[("PNG Image", "*.png")],
+                        defaultextension=".png"
+                        )
 
     # Check the case user presses cancel, aka img_path = None
     if img_path:
-        if os.name == "nt":
-            img_path += ".png"
         move("./temp.png", img_path.name)
         save_button.config(state=DISABLED)
  
 
 # Main window dimensions
 WIDTH = 500
+# Need to adjust a bit the dimensions if the os is windows
+if os.name == "nt":
+    WIDTH = int(WIDTH * 0.8)
 HEIGHT = 500
 BG_COLOR = "pink"
 
@@ -50,7 +54,7 @@ window.geometry(str(WIDTH) + "x" + str(HEIGHT))
 window.title("QR code generator")
 window.config(background=BG_COLOR)
 
-prompt = Label(window, text="Enter text: ", pady=20, bg=BG_COLOR)
+prompt = Label(window, text="Enter text: ", padx=10, pady=20, bg=BG_COLOR)
 prompt.grid(row=0, column=0)
 
 entry = Entry(window, width=50)
@@ -59,15 +63,11 @@ entry.grid(row=0, column=1)
 frame = Frame(window, bg=BG_COLOR)
 frame.grid(row=1, column=0, columnspan=2)
 
-# save_label = Label(frame, text="When saving the QR code, add '.png' at the end of the file name.", bg=BG_COLOR)
-# save_label.grid(row=0, column=0, columnspan=2)
-
 save_button = Button(frame, text="Save", command=lambda: save(save_button), state=DISABLED, cursor="hand2")
-save_button.grid(row=1, column=1)
+save_button.grid(row=1, column=1, padx=5)
 
 generate_button = Button(frame, text="Generate", command=lambda: generate(window, entry, save_button), cursor="hand2")
-generate_button.grid(row=1, column=0)
-
+generate_button.grid(row=1, column=0, padx=5)
 
 window.mainloop()
 
